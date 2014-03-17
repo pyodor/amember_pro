@@ -1,0 +1,1 @@
+require 'amember_pro'
