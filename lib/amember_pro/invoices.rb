@@ -1,5 +1,5 @@
 module AmemberPro
-  class Users
+  class Invoices
     
     attr_accessor :id
 
@@ -22,14 +22,14 @@ module AmemberPro
     end
 
     def self.to_string
-      'users?'
+      'invoices?'
     end
 
     private
     
     def self.connection(id=nil)
       url = self.url
-      url.sub!(self.to_string, "users/#{id}?") unless id.nil?
+      url.sub!(self.to_string, "invoices/#{id}?") unless id.nil?
       Faraday.new(:url => url)
     end
 

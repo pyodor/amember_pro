@@ -1,5 +1,9 @@
+require 'faraday'
 require "amember_pro/version"
 require "amember_pro/users"
+require "amember_pro/invoices"
+require "amember_pro/products"
+require "amember_pro/check_access"
 
 module AmemberPro
   END_POINT = 'api/'
