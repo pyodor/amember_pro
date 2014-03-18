@@ -2,14 +2,13 @@ require 'faraday'
 
 module AmemberPro
   class Users
-    @@users = 'users?'
-
+    
     def self.get
       self.url
     end
 
     def self.to_string
-      @@users
+      'users?'
     end
 
     def self.url
