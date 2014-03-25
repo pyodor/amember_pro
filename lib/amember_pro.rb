@@ -20,8 +20,6 @@ module AmemberPro
       self.add_params(options) if options
     end
 
-    protected
-
     def build_url(controller)
       self.url + controller.to_string + Parameter::KEY + self.access_key + self.params
     end
