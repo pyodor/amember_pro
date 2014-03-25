@@ -30,7 +30,7 @@ module AmemberPro
     def self.connection(id=nil)
       url = self.url
       url.sub!(self.to_string, "invoices/#{id}?") unless id.nil?
-      Faraday.new(:url => url)
+      Faraday.new(:url => url, :ssl => {:verify => false})
     end
 
     def self.url

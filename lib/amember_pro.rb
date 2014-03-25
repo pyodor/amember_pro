@@ -6,7 +6,7 @@ require "amember_pro/products"
 require "amember_pro/check_access"
 
 module AmemberPro
-  END_POINT = 'api/'
+  END_POINT = 'api'
 
   class << self
     attr_accessor :url
@@ -14,7 +14,7 @@ module AmemberPro
     attr_accessor :params
   
     def new(url, access_key, options=nil)
-      self.url = url + END_POINT
+      self.url = url
       self.access_key = access_key
       self.params = ''
       self.add_params(options) if options

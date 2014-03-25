@@ -23,7 +23,7 @@ module AmemberPro
     def self.connection(method)
       url = self.url
       url.sub!(self.to_string, "#{self.to_string}#{method}?")
-      Faraday.new(:url => url)
+      Faraday.new(:url => url, :ssl => {:verify => false})
     end
 
     def self.url
