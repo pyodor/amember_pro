@@ -2,16 +2,16 @@ module AmemberPro
   class CheckAccess
     
 
-    def self.by_login_pass
-      connection('by-login-pass').get.body
+    def self.by_login_pass(params={})
+      check_access('by-login-pass', params)
     end
 
-    def self.by_login
-      connection('by-login').get.body
+    def self.by_login(params={})
+      check_access('by-login', params)
     end
     
-    def self.by_email
-      connection('by-email').get.body
+    def self.by_email(params={})
+      check_access('by-email', params)
     end
     
     def self.to_string
@@ -20,12 +20,23 @@ module AmemberPro
 
     private
     
-    def self.connection(method)
-      url = self.url
-      url.sub!(self.to_string, "#{self.to_string}#{method}?")
-      Faraday.new(:url => url, :ssl => {:verify => false})
+    def self.check_access(amember_method, params)
+      connection('get', amember_method, params).body
     end
 
+    def self.connection(method, amember_method, params={})
+      api = "/#{AmemberPro::END_POINT}/check-access/#{amember_method}"
+
+      params[:_key] = AmemberPro.access_key
+      url = AmemberPro.url
+      conn = Faraday.new(:url => url, :ssl => {:verify => false})
+
+      case method
+      when 'get'
+        conn.get api, params
+      end
+    end
+   
     def self.url
       AmemberPro.build_url self
     end

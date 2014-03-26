@@ -1,6 +1,6 @@
 module AmemberPro
   class Users
-    
+
     attr_accessor :id
 
     def self.get(params={})
@@ -10,15 +10,15 @@ module AmemberPro
     def self.add(params)
       connection('post', params).body
     end
-    
-    def self.update(params={})
-      raise ArgumentError, 'user id is required' unless id
-      self.connection('put', params).put.body
+
+    def self.update(id, params={})
+      params[:id] = id
+      self.connection('put', params).body
     end
-    
+
     def self.delete(id)
-      raise ArgumentError, 'user id is required' unless id
-      self.connection('delete', id).delete.body
+      params = {:id => id}
+      self.connection('delete', params).body
     end
 
     def self.to_string
@@ -26,23 +26,27 @@ module AmemberPro
     end
 
     private
-    
+
     def self.connection(method, params={})
-      params[:_key] = AmemberPro.access_key
-      url = AmemberPro.url
       api = "/#{AmemberPro::END_POINT}/users"
-      conn = Faraday.new(:url => url, :ssl => {:verify => false})
-      
-      case method
-      when 'get'
-        # TODO
-      when 'post'
-        conn.post api, params
+      if method == 'put' or method == 'delete'
+        api += "/#{params[:id]}"
       end
 
-      #url = self.url
-      #url.sub!(self.to_string, "users/#{id}?") unless id.nil?
-      #Faraday.new(:url => url, :ssl => {:verify => false})
+      params[:_key] = AmemberPro.access_key
+      url = AmemberPro.url
+      conn = Faraday.new(:url => url, :ssl => {:verify => false})
+
+      case method
+      when 'get'
+        conn.get api, params
+      when 'post'
+        conn.post api, params
+      when 'put'
+        conn.put api, params
+      when 'delete'
+        conn.delete api, params
+      end
     end
 
     def self.url
