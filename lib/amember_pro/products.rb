@@ -1,40 +1,33 @@
 module AmemberPro
   class Products
-    
-    attr_accessor :id
-
-    def self.get
-      connection.get.body
+    def self.get(params={})
+      connection(Method::GET, params).body
     end
 
-    def self.add
-      connection.post.body
-    end
-    
-    def self.update(id=nil)
-      raise ArgumentError, 'user id is required' unless id
-      self.connection(id).put.body
-    end
-    
-    def self.delete(id=nil)
-      raise ArgumentError, 'user id is required' unless id
-      self.connection(id).delete.body
+    def self.add(params)
+      connection(Method::POST, params).body
     end
 
-    def self.to_string
-      'products?'
+    def self.update(id, params={})
+      params[:id] = id
+      self.connection(Method::PUT, params).body
+    end
+
+    def self.delete(id)
+      params = {:id => id}
+      self.connection(Method::DELETE, params).body
+    end
+
+    def self.to_s
+      'products'
     end
 
     private
-    
-    def self.connection(id=nil)
-      url = self.url
-      url.sub!(self.to_string, "products/#{id}?") unless id.nil?
-      Faraday.new(:url => url)
-    end
 
-    def self.url
-      AmemberPro.build_url self
+    def self.connection(method, params={})
+      AmemberPro.params = params
+      AmemberPro.method = method
+      AmemberPro.connection(self)
     end
   end
 end
