@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe AmemberPro do
   it 'should be able to connect to an aMember domain' do
-    AmemberPro.new("https://billing.gcpgroup.com/", "btwKgHsxVBu5FmiAoIVU", :params => {:login => 'dado', :pass => 'password', :email => 'csicebu@gmail.com', :name => 'Diosdado Campo'})
-    AmemberPro::Users.add({:_key => 'btwKgHsxVBu5FmiAoIVU', :name => 'd'}) 
+    AmemberPro.new("https://billing.gcpgroup.com/", "btwKgHsxVBu5FmiAoIVU")
+    AmemberPro::Users.get 
   end
   
   it 'should have correct initization' do

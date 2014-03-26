@@ -1,7 +1,5 @@
 module AmemberPro
   class CheckAccess
-    
-
     def self.by_login_pass(params={})
       check_access('by-login-pass', params)
     end
@@ -14,18 +12,18 @@ module AmemberPro
       check_access('by-email', params)
     end
     
-    def self.to_string
-      'check-access/'
+    def self.to_s
+      'check-access'
     end
 
     private
     
     def self.check_access(amember_method, params)
-      connection('get', amember_method, params).body
+      connection(Method::GET, amember_method, params).body
     end
 
     def self.connection(method, amember_method, params={})
-      api = "/#{AmemberPro::END_POINT}/check-access/#{amember_method}"
+      api = "/#{AmemberPro::END_POINT}/#{self.to_s}/#{amember_method}"
 
       params[:_key] = AmemberPro.access_key
       url = AmemberPro.url
@@ -35,10 +33,6 @@ module AmemberPro
       when 'get'
         conn.get api, params
       end
-    end
-   
-    def self.url
-      AmemberPro.build_url self
     end
   end
 end

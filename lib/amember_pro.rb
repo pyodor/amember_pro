@@ -12,35 +12,42 @@ module AmemberPro
     attr_accessor :url
     attr_accessor :access_key
     attr_accessor :params
-  
-    def new(url, access_key, options=nil)
+    attr_accessor :method
+
+    def new(url, access_key)
       self.url = url
       self.access_key = access_key
-      self.params = ''
-      self.add_params(options) if options
     end
 
-    def build_url(controller)
-      self.url + controller.to_string + Parameter::KEY + self.access_key + self.params
-    end
+    def connection(controller)
+      method = self.method
+      params = self.params
+      api = "/#{self::END_POINT}/#{controller.to_s}"
 
-    def add_params(options)
-      options[:params].each do |key, value|
-        if Parameter::ALLOWED.keys.include?(key)
-          self.params += "#{Parameter::ALLOWED[key]}#{value}"
-        end
-      end if options[:params]
+      if method == Method::PUT or method == Method::DELETE
+        api += "/#{params[:id]}"
+      end
+
+      params[:_key] = self.access_key
+      conn = Faraday.new(:url => self.url, :ssl => {:verify => false})
+
+      case method
+      when Method::GET
+        conn.get api, params
+      when Method::POST
+        conn.post api, params
+      when Method::PUT
+        conn.put api, params
+      when Method::DELETE
+        conn.delete api, params
+      end
     end
   end
 
-  module Parameter
-    KEY = '_key='
-    ALLOWED = {
-      :format => '&_format=',
-      :count => '&_count=',
-      :page => '&_page=',
-      :filter => '&_filter=',
-      :nested => '&_nested[]='
-    }
+  module Method
+    GET = 'get'
+    POST = 'post'
+    PUT = 'put'
+    DELETE = 'delete'
   end
 end
