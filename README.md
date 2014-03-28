@@ -1,6 +1,8 @@
 # AmemberPro
 
-A REST client for aMember Pro Web API (http://www.amember.com/docs/REST)
+[![Gem Version](https://badge.fury.io/rb/amember_pro.png)](http://badge.fury.io/rb/amember_pro)
+
+A REST client for [aMember Pro Web API](http://www.amember.com/docs/REST)
 This little gem should work against on aMember Pro 4.2.6
 
 ## Installation
@@ -19,19 +21,28 @@ Or install it yourself as:
 
 ## Usage
 
-Intialize AmemberPro and provide aMember parameters:
+Intialize AmemberPro:
 
-    AmemberPro(url, access_key, [params]) # for params refer to aMember docs
+    AmemberPro(url, access_key)
 
-Get or Add methods, the output depends on the params provided:
-
+Get Method:
+    
     AmemberPro::Users.get # get a list users
-    AmemberPro::Users.add # add a user
+    AmemberPro::Users.get({"_count" => 10, "_format" => "xml"}) # get 10 users and format is in xml, default format is json
+    AmemberPro::Users.get({"_nested[]" => "invoices"}) # pulls together with invoices
+    AmemberPro::Users.get({"_filter[name_f]" => "Gabino", "_filter[name_l]" => "Ang"}) # filter user with name Gabino Ang
+    
+Add Method:
 
-Update or Delete, id is required
+    AmemberPro::Users.add({:login => "mylogin", :pass => "mypass", :name_f => "Gabino", :name_l => "Ang"})
 
-    AmemberPro::Users.update id
-    AmemberPro::Users.delete id
+Update Method:
+
+    AmemberPro::Users.update(11, {:email => "gabino@ang.com"}) # update user's email address with id 11 
+
+Delete Method:
+    
+    AmemberPro::Users.delete(13) # delete user with id 13
 
 The above usage applies also to Invoices and Products API
 
@@ -40,8 +51,9 @@ The above usage applies also to Invoices and Products API
 Same as above after initialization of AmemberPro the following 
 methods (by-login-pass, by-login, by-email) can be called:
 
-    AmemberPro::CheckAcces.by_login_pass
+    AmemberPro::CheckAcces.by_login_pass({:login => "mylogin", :pass => "mypass"})
 
+Refer to this [document](http://www.amember.com/docs/REST) for all the parameters you can use
 
 ## Contributing
 
