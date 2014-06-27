@@ -19,11 +19,18 @@ Or install it yourself as:
 
     $ gem install amember_pro
 
+## Configuration
+
+Generate amember_pro config file, this will generate amember_pro.yml inside
+config directory
+
+    $ amember_pro
+
 ## Usage
 
 Intialize AmemberPro:
 
-    AmemberPro(url, access_key)
+    AmemberPro.new(AMEMBER_PRO['url'], AMEMBER_PRO['access_key'])
 
 Get Method:
     
