@@ -1,9 +1,9 @@
 #!/usr/bin/env ruby
 
 require 'amember_pro'
-
 begin
     AmemberPro::Configurator.rails_config_make
+    puts "Amember config files successfully generated"
 rescue Exception => e
   puts e.message
 end
