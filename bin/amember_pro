@@ -4,7 +4,7 @@ require 'amember_pro'
 
 begin
     AmemberPro::Configurator.rails_config_make
-rescue Exceptions => e
+rescue Exception => e
   puts e.message
 end
 

@@ -60,9 +60,9 @@ module AmemberPro
 
     class << self
       def rails_config_make
-        throw 'Rails config directory not found.' unless rails_config_dir_exists?
-        throw 'Amember config yaml file already exists.' if amember_config_file_exists?
-        throw 'Rails config/initializers directory not found.' unless rails_initializers_dir_exists?
+        raise 'Rails config directory not found.' unless rails_config_dir_exists?
+        raise 'Amember config yaml file already exists.' if amember_config_file_exists?
+        raise 'Rails config/initializers directory not found.' unless rails_initializers_dir_exists?
         
         write_yaml_config_file
         write_initializers_file
