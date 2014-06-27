@@ -4,14 +4,8 @@ require 'amember_pro'
 
 begin
     AmemberPro::Configurator.rails_config_make
-rescue AmemberPro::Exceptions::NoRailsConfigDirectory
-    puts "Rails config directory not found, make sure you're inside rails root
-    project"
-rescue AmemberPro::Exceptions::AmemberConfigFileExists
-    puts "Amember Pro config file already generated."
-rescue AmemberPro::Exceptions::NoRailsInitializersDirectory
-    puts "Rails initializers directory not found, make sure you're inside rails root
-    project"
+rescue Exceptions => e
+  puts e.message
 end
 
 
