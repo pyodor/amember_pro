@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+
+require 'rubygem'
+require 'amember_pro'
+
+begin
+    configurator = AmemberPro::Configurator.new
+    configurator.rails_config_make
+rescue AmemberPro::Exceptions::NoRailsConfigDirectory
+    puts "Rails config directory not found, make sure you're inside rails root
+    project"
+rescue AmemberPro::Exceptions::AmemberConfigFileExists
+    puts "Amember Pro config file already generated."
+rescue AmemberPro::Exceptions::NoRailsInitializersDirectory
+    puts "Rails initializers directory not found, make sure you're inside rails root
+    project"
+end
+
+
