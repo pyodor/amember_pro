@@ -3,8 +3,7 @@
 require 'amember_pro'
 
 begin
-    configurator = AmemberPro::Configurator.new
-    configurator.rails_config_make
+    AmemberPro::Configurator.rails_config_make
 rescue AmemberPro::Exceptions::NoRailsConfigDirectory
     puts "Rails config directory not found, make sure you're inside rails root
     project"
