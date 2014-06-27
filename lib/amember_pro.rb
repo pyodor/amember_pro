@@ -50,4 +50,58 @@ module AmemberPro
     PUT = 'put'
     DELETE = 'delete'
   end
+
+  module Configurator
+    RAILS_CONFIG_DIR = 'config'
+    AMEMBER_YAML_NAME = 'amember_pro.yml'
+    AMEMBER_YAML_FILE = "#{RAILS_CONFIG_DIR}/#{AMEMBER_YAML_NAME}"
+    RAILS_INITIALIZERS_DIR = "#{RAILS_CONFIG_DIR}/initializers"
+    AMEMBER_INITIALIZERS_FILE = "#{RAILS_INITIALIZERS_DIR}/amember_pro.rb"
+
+    class << self
+      def rails_config_make
+        throw Exceptions::NoRailsConfigDirectory unless rails_config_dir_exists?
+        throw Exceptions::AmemberConfigFileExists if amember_config_file_exists?
+        throw Exceptions::NoRailsInitializersDirectory unless rails_initializers_dir_exists?
+        
+        write_yaml_config_file
+        write_initializers_file
+      end
+
+      private
+      
+      def write_initializers_file
+        code = "AMEMBER_PRO = YAML::load_file(Rails.root + '#{AMEMBER_YAML_FILE}')"
+        File.open(AMEMBER_INITIALIZERS_FILE, "w+") {|f| f.write(code)}
+      end
+
+      def write_yaml_config_file
+        require 'yaml'
+        data = {
+          "url" => "YOUR AMEMBER URL INSTALLTION HERE",
+          "access_key" => "YOUR ACCESS KEY HERE"
+        }
+        File.open(AMEMBER_YAML_FILE, "w") {|f| f.write(data.to_yaml)}
+
+      end
+
+      def rails_config_dir_exists?
+        File.directory?(RAILS_CONFIG_DIR)
+      end
+
+      def amember_config_file_exists?
+        File.exists?(AMEMBER_YAML_FILE)
+      end
+
+      def rails_initializers_dir_exists?
+        File.directory?(RAILS_INITIALIZERS_DIR)
+      end
+    end
+  end
+
+  module Exceptions
+    class NoRailsConfigDirectory < StandardError; end
+    class AmemberConfigFileExists < StandardError; end
+    class NoRailsInitializersDirectory < StandardError; end
+  end
 end
