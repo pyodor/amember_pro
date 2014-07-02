@@ -61,18 +61,23 @@ module AmemberPro
     class << self
       def rails_config_make
         raise 'Rails config directory not found.' unless rails_config_dir_exists?
-        raise 'Amember config yaml file already exists.' if amember_config_file_exists?
         raise 'Rails config/initializers directory not found.' unless rails_initializers_dir_exists?
-        
-        write_yaml_config_file
+        write_yaml_config_file unless amember_config_file_exists?
         write_initializers_file
       end
 
       private
       
       def write_initializers_file
-        code = "AMEMBER_PRO = YAML::load_file(Rails.root + '#{AMEMBER_YAML_FILE}')"
-        File.open(AMEMBER_INITIALIZERS_FILE, "w+") {|f| f.write(code)}
+        code = <<-CODE
+          AMEMBER_PRO = YAML::load_file(Rails.root + '#{AMEMBER_YAML_FILE}');
+          AmemberPro.new(AMEMBER_PRO['url'], AMEMBER_PRO['access_key'])
+        CODE
+        File.open(AMEMBER_INITIALIZERS_FILE, "w+") do |f| 
+          code.each_line do |line|
+            f.write("#{line.strip!}\n")
+          end
+        end
       end
 
       def write_yaml_config_file
