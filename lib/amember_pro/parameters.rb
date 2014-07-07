@@ -1,31 +1,55 @@
 module AmemberPro
   module Parameters
     class << self
-      def method_missing meth, *args, &block
-        key = meth.to_s
-        val = args[0]
-        case key
-        when 'format'
-          key.insert(0, '_')
-          val ||= 'json'
-        when 'count'
-          key.insert(0, '_')
-          val ||= '20'
-        when 'page'
-          key.insert(0, '_')
-          val ||= '0'
+      attr_accessor :parameters
+      attr_accessor :key
+      attr_accessor :val
+      attr_accessor :args
+      attr_accessor :block
+
+      def method_missing method, *args, &block
+        self.args = args
+        self.key = method.to_s
+        self.val = self.args[0]
+        self.block = block
+
+        case method
+        when :format
+          underscore_prefix
+          self.val ||= 'json'
+        when :count
+          underscore_prefix
+          self.val ||= '20'
+        when :page
+          underscore_prefix
+          self.val ||= '0'
+        when :filter
+          underscore_prefix
+          filterify
+        when :nested
+          underscore_prefix
+          nestify
         end
-        add key.to_s, val.to_s
+        
+        add self.key.to_s, self.val.to_s
+      end
+
+      def underscore_prefix
+        self.key = self.key.insert(0, '_')
       end
 
       def new
-        @@parameters = Hash.new
+        self.parameters = Hash.new
         self
       end
 
       def add key, value
-        @@parameters[key.to_s] = value.to_s
-        @@parameters
+        self.parameters[key.to_s] = value.to_s
+        self.parameters
+      end
+
+      def to_hash
+        self.to_s
       end
 
       def to_s
@@ -34,8 +58,19 @@ module AmemberPro
 
       private
 
+      def nestify
+        puts self.args.inspect
+        puts self.block.inspect
+      end
+
+      def filterify
+        fieldname = self.args[0]
+        self.key = "#{self.key}[#{fieldname}]"
+        self.val = args[1]
+      end
+
       def current_params
-        @@parameters
+        self.parameters
       end
     end
 

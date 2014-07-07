@@ -4,6 +4,7 @@ require "amember_pro/users"
 require "amember_pro/invoices"
 require "amember_pro/products"
 require "amember_pro/check_access"
+require "amember_pro/parameters"
 
 module AmemberPro
   END_POINT = 'api'
