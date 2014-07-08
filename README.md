@@ -62,6 +62,32 @@ methods (by-login-pass, by-login, by-email) can be called:
 
 Refer to this [document](http://www.amember.com/docs/REST) for all the parameters you can use
 
+## Parameters And Nested Parameters
+
+You can use the Parameters and Nested class, if you prefer constructing
+parameters in Ruby way:
+
+    # ADDING AN INVOICE
+    
+    # Create an invoice item parameters
+    invoice_item = AmemberPro::Parameters.new do |i|
+        i.item_id 20
+        i.item_title "My Product"
+        i.first_price 11.00
+    end
+
+    # Nest it
+    invoice_nested = AmemberPro::Parameters::Nested.new("invoice-items") do |inv|
+        inv << invoice_item
+    end
+
+    # Bind it to a user and call the add invoice api
+    invoice = AmemberPro::Parameters.new
+    invoice.user_id 140
+    invoice.nested invoice_nested 
+
+    AmemberPro::Invoices.add invoice
+
 ## Contributing
 
 1. Fork it ( http://github.com/pyodor/amember_pro/fork )
