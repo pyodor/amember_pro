@@ -22,7 +22,7 @@ module AmemberPro
 
     def connection(controller)
       method = self.method
-      params = self.params
+      params = self.params.to_hash
       api = "/#{self::END_POINT}/#{controller.to_s}"
 
       if method == Method::PUT or method == Method::DELETE
@@ -31,7 +31,7 @@ module AmemberPro
 
       params[:_key] = self.access_key
       conn = Faraday.new(:url => self.url, :ssl => {:verify => false})
-
+      
       case method
       when Method::GET
         conn.get api, params

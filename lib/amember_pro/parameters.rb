@@ -4,13 +4,11 @@ module AmemberPro
     attr_accessor :key
     attr_accessor :value
     attr_accessor :args
-    attr_accessor :block
 
-    def method_missing method, *args, &block
+    def method_missing method, *args
       self.args = args
       self.key = method.to_s
       self.value = self.args[0]
-      self.block = block
 
       case method
       when :format
@@ -27,6 +25,10 @@ module AmemberPro
         filterify
       end
       add self.key.to_s, self.value.to_s
+    end
+
+    def delete key
+      self.parameters.to_hash.delete(key.to_s)
     end
 
     def nested nest
@@ -70,7 +72,7 @@ module AmemberPro
       self.parameters
     end
 
-    
+
     class Nested
       attr_accessor :nest
       attr_accessor :args
@@ -100,13 +102,16 @@ module AmemberPro
 
       def nestify
         self.nested = Hash.new
-        self.args.each_with_index do |arg, index|
-          k = "_nested[#{self.nest}][#{index}]"
-          p arg.inspect
-          arg.each do |key,val|
-            k += "[#{key}]"
-            self.nested[k] = val
+        unless self.args.empty?
+          self.args.each_with_index do |arg, index|
+            n = "nested[#{self.nest}][#{index}]"
+            arg.each do |key,val|
+              k = "#{n}[#{key}]"
+              self.nested[k] = val
+            end
           end
+        else
+          self.nested["_nested[]"] = self.nest
         end
       end
     end
