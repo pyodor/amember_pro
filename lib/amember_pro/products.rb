@@ -1,21 +1,21 @@
 module AmemberPro
   class Products
     def self.get(params={})
-      connection(Method::GET, params).body
+      connection(Method::GET, params)
     end
 
     def self.add(params)
-      connection(Method::POST, params).body
+      connection(Method::POST, params)
     end
 
     def self.update(id, params={})
       params[:id] = id
-      self.connection(Method::PUT, params).body
+      self.connection(Method::PUT, params)
     end
 
     def self.delete(id)
       params = {:id => id}
-      self.connection(Method::DELETE, params).body
+      self.connection(Method::DELETE, params)
     end
 
     def self.to_s

@@ -1,10 +1,13 @@
+require 'json'
 require 'faraday'
+require 'dish'
 require "amember_pro/version"
 require "amember_pro/users"
 require "amember_pro/invoices"
 require "amember_pro/products"
 require "amember_pro/check_access"
 require "amember_pro/parameters"
+require "amember_pro/response"
 
 module AmemberPro
   END_POINT = 'api'
@@ -14,34 +17,38 @@ module AmemberPro
     attr_accessor :access_key
     attr_accessor :params
     attr_accessor :method
+    attr_accessor :model
 
     def new(url, access_key)
-      self.url = url
+      self.url        = url
       self.access_key = access_key
     end
 
-    def connection(controller)
-      method = self.method
-      params = self.params.to_hash
-      api = "/#{self::END_POINT}/#{controller.to_s}"
-
+    def connection(model)
+      method      = self.method
+      params      = self.params.to_hash
+      self.model  = model.to_s
+      api         = "/#{self::END_POINT}/#{self.model}"
+  
       if method == Method::PUT or method == Method::DELETE
         api += "/#{params[:id]}"
       end
 
       params[:_key] = self.access_key
-      conn = Faraday.new(:url => self.url, :ssl => {:verify => false})
+      conn          = Faraday.new(:url => self.url, :ssl => {:verify => false})
       
       case method
       when Method::GET
-        conn.get api, params
+        res = conn.get api, params
       when Method::POST
-        conn.post api, params
+        res = conn.post api, params
       when Method::PUT
-        conn.put api, params
+        res = conn.put api, params
       when Method::DELETE
-        conn.delete api, params
+        res = conn.delete api, params
       end
+      self::Response.new(res.body)
+      #Dish(JSON.parse(res.body))
     end
   end
 
