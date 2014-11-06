@@ -1,6 +1,7 @@
 # AmemberPro
 
 [![Gem Version](https://badge.fury.io/rb/amember_pro.png)](http://badge.fury.io/rb/amember_pro)
+[![Code Climate](https://codeclimate.com/github/pyodor/amember_pro/badges/gpa.svg)](https://codeclimate.com/github/pyodor/amember_pro)
 
 A REST client for [aMember Pro Web API](http://www.amember.com/docs/REST)
 This little gem should work against on aMember Pro 4.2.6
