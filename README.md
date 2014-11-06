@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/pyodor/amember_pro.png?label=ready&title=Ready)](https://waffle.io/pyodor/amember_pro)
 # AmemberPro
 
 [![Gem Version](https://badge.fury.io/rb/amember_pro.png)](http://badge.fury.io/rb/amember_pro)
