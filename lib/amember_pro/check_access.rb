@@ -23,7 +23,7 @@ module AmemberPro
     end
 
     def self.connection(method, amember_method, params={})
-      api = "/#{AmemberPro::END_POINT}/#{self.to_s}/#{amember_method}"
+      api = "#{AmemberPro::END_POINT}/#{self.to_s}/#{amember_method}"
 
       params[:_key] = AmemberPro.access_key
       url = AmemberPro.url

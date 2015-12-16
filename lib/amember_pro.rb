@@ -23,7 +23,7 @@ module AmemberPro
     def connection(controller)
       method = self.method
       params = self.params.to_hash
-      api = "/#{self::END_POINT}/#{controller.to_s}"
+      api = "#{self::END_POINT}/#{controller.to_s}"
 
       if method == Method::PUT or method == Method::DELETE
         api += "/#{params[:id]}"
