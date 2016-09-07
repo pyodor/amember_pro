@@ -5,6 +5,10 @@ require "amember_pro/invoices"
 require "amember_pro/products"
 require "amember_pro/check_access"
 require "amember_pro/parameters"
+require "amember_pro/billing_plans"
+require "amember_pro/invoice_refunds"
+require "amember_pro/invoice_payments"
+require "amember_pro/access"
 
 module AmemberPro
   END_POINT = 'api'
@@ -31,7 +35,7 @@ module AmemberPro
 
       params[:_key] = self.access_key
       conn = Faraday.new(:url => self.url, :ssl => {:verify => false})
-      
+
       case method
       when Method::GET
         conn.get api, params
@@ -68,13 +72,13 @@ module AmemberPro
       end
 
       private
-      
+
       def write_initializers_file
         code = <<-CODE
           AMEMBER_PRO = YAML::load_file(Rails.root + '#{AMEMBER_YAML_FILE}');
           AmemberPro.new(AMEMBER_PRO['url'], AMEMBER_PRO['access_key'])
         CODE
-        File.open(AMEMBER_INITIALIZERS_FILE, "w+") do |f| 
+        File.open(AMEMBER_INITIALIZERS_FILE, "w+") do |f|
           code.each_line do |line|
             f.write("#{line.strip!}\n")
           end
